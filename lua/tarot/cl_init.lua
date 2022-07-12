@@ -94,11 +94,8 @@ net.Receive("Nebula.Tarot:UpdateCards", function()
     local am = net.ReadUInt(8)
 
     if not LocalPlayer()._cards then
-        LocalPlayer()._cards = {
-            Equipped = {},
-            Inventory = {},
-        }
+        LocalPlayer()._cards = {}
     end
 
-    LocalPlayer()._cards.Inventory[id] = am
+    LocalPlayer()._cards[id] = am
 end)
