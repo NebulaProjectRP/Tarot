@@ -63,7 +63,7 @@ function NebulaTarot:ShowCard(id)
         return false
     end
     local ent = pnl:GetEntity()
-    ent:SetSkin(id)
+    ent:SetSkin(self.Cards[id].Skin)
     pnl.Part = CreateParticleSystem(ent, "tarot_card", PATTACH_ABSORIGIN_FOLLOW, 0, Vector(0, 0, 0))
     pnl.Part:SetShouldDraw(false)
     ent:ResetSequence("show")
@@ -98,4 +98,128 @@ net.Receive("Nebula.Tarot:UpdateCards", function()
     end
 
     LocalPlayer()._cards[id] = am
+end)
+
+NebulaTarot.Favorites = NebulaTarot.Favorites or util.JSONToTable(cookie.GetString("cards_equipped", "[]"))
+
+if IsValid(NebulaTarot.CardHUD) then
+    NebulaTarot.CardHUD:Remove()
+end
+
+function NebulaTarot:CreateHUD()
+
+    if IsValid(NebulaTarot.CardHUD) then
+        NebulaTarot.CardHUD:Remove()
+    end
+
+    local dark = Material("gui/center_gradient")
+    local black, white = Color(0, 0, 0, 200), Color(255, 255, 255, 25)
+    local cards = vgui.Create("DPanel")
+    cards:SetSize(48 * 3, 128)
+    cards:AlignBottom(32)
+    cards:AlignRight(300)
+    cards.Paint = function(s, w, h)
+        surface.SetMaterial(dark)
+        surface.SetDrawColor(s.ShouldDisplay and white or black)
+        surface.DrawTexturedRect(0, h - 32, w, 32)
+        draw.SimpleText("[T] Karma", NebulaUI:Font(24), w / 2, h - 18, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+
+    hook.Add("PlayerBindPress", cards, function(cards, ply, bind, pressed)
+        if not pressed then return end
+        if string.StartWith(bind, "slot") then
+            local id = tonumber(string.sub(bind, 5))
+            local card = NebulaTarot.Favorites[id]
+            if not card then
+                surface.PlaySound("physics/cardboard/cardboard_box_impact_soft2.wav")
+                return
+            end
+            if (LocalPlayer():getCards()[card] or 0) > 0 then
+                NebulaTarot:ShowCard(card)
+                net.Start("Nebula.Tarot:RequestUse")
+                net.WriteString(card)
+                net.SendToServer()
+            end
+
+            return true
+        end
+    end)
+
+    cards.Models = {}
+    cards.ModelOn = false
+    cards.Think = function(s)
+        s.ShouldDisplay = not vgui.CursorVisible() and input.IsButtonDown(KEY_T)
+        if (s.ShouldDisplay != s.ModelOn) then
+            s.ModelOn = s.ShouldDisplay
+            if (s.ModelOn) then
+                surface.PlaySound("physics/cardboard/cardboard_box_impact_soft7.wav")
+                for k, v in pairs(s.Models) do
+                    v.Progress = 0
+                    v:AlphaTo(255, 0.25, 0)
+                end
+            else
+                surface.PlaySound("physics/cardboard/cardboard_box_impact_soft4.wav")
+                for k, v in pairs(s.Models) do
+                    v:AlphaTo(0, 0.25, 0)
+                end
+            end
+        end
+    end
+
+    for k = 1, 3 do
+        local ent = vgui.Create("DModelPanel", cards)
+        table.insert(cards.Models, ent)
+        ent:SetModel("models/nebularp/tarot.mdl")
+        ent:Dock(LEFT)
+        ent:SetWide(48)
+        ent:SetFOV(40)
+        ent:SetAlpha(0)
+        ent:SetCamPos(Vector(0, -40, -5))
+        ent:SetLookAt(Vector(0, 0, -10))
+        ent.Progress = 0
+        ent.Card = self.Favorites[k]
+        ent.PreDrawModel = function(s, e)
+            if (not s.Card) then
+                e:SetLocalAngles(Angle(0, 180, 0))
+                return
+            end
+            local amount = (LocalPlayer():getCards()[s.Card] or 0)
+            render.SuppressEngineLighting(true)
+            render.SetColorModulation(.8, .8, .8)
+            render.SetBlend((amount == 0 and .25 or 1) * (s:GetAlpha() / 255))
+            e:DrawModel()
+            render.SetBlend(1)
+            render.SetColorModulation(1, 1, 1)
+            render.SuppressEngineLighting(false)
+            return false
+        end
+        ent.LayoutEntity = function(s, e)
+            e:SetSequence(s.Card and "on" or "off")
+            s.Progress = math.Clamp(s.Progress + FrameTime() * 4, 0, 1)
+            e:SetCycle(s.Progress)
+        end
+        ent.PaintOver = function(s, w, h)
+            draw.SimpleText("(" .. k .. ")", NebulaUI:Font(16), w / 2, -4, color_white, TEXT_ALIGN_CENTER)
+            if (s.Card) then
+                local amount = LocalPlayer():getCards()[s.Card] or 0
+                draw.SimpleText("x" .. amount, NebulaUI:Font(16), w / 2, h - 52, color_white, TEXT_ALIGN_CENTER)
+                if (amount > 0) then
+                    draw.SimpleText("x" .. amount, NebulaUI:Font(18), w / 2 + 2, h - 51, Color(0, 0, 0, 200), TEXT_ALIGN_CENTER)
+                end
+            end
+        end
+        if (ent.Card) then
+            ent:GetEntity():SetSkin(self.Cards[ent.Card].Skin)
+        end
+    end
+
+    self.CardHUD = cards
+end
+
+if IsValid(LocalPlayer()) then
+    NebulaTarot:CreateHUD()
+end
+
+hook.Add("InitPostEntity", "NebulaTarot.HUD", function()
+    NebulaTarot:CreateHUD()
 end)

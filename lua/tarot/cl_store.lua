@@ -8,6 +8,7 @@ function PANEL:Init()
     self:DockPadding(mx, my, mx, my)
     self:SetAlpha(0)
     self:AlphaTo(255, .25, 0)
+    self:ShowCloseButton(false)
 
     self.Foot = vgui.Create("nebula.button", self)
     self.Foot:Dock(BOTTOM)
@@ -231,6 +232,7 @@ function PANEL:SetupInventory()
 
             s.selected = s.hovering
             cookie.Set("cards_equipped", util.TableToJSON(NebulaTarot.Favorites))
+            NebulaTarot:CreateHUD()
         end
 
         NebulaTarot.Controller[k] = btn
@@ -262,7 +264,7 @@ net.Receive("Nebula.Tarot:BuyCard", function()
         NebulaTarot.Store:AddReward(result)
         timer.Simple(1, function()
             if not IsValid(NebulaTarot.Controller[result]) then return end
-            NebulaTarot.Controller[result].Amount = LocalPlayer():getCards().Inventory[result]
+            NebulaTarot.Controller[result].Amount = LocalPlayer():getCards()[result]
         end)
     end
 end)

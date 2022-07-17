@@ -128,3 +128,10 @@ net.Receive("Nebula.Tarot:BuyCard", function(l, ply)
     net.WriteString(result)
     net.Send(ply)
 end)
+
+net.Receive("Nebula.Tarot:RequestUse", function(l, ply)
+    local id = net.ReadString()
+    if not ply:getCards()[id] then return end
+
+    ply:useCard(id)
+end)
