@@ -122,7 +122,14 @@ function NebulaTarot:CreateHUD()
         surface.SetMaterial(dark)
         surface.SetDrawColor(s.ShouldDisplay and white or black)
         surface.DrawTexturedRect(0, h - 32, w, 32)
-        draw.SimpleText("[T] Karma", NebulaUI:Font(24), w / 2, h - 18, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("[T] Karma", NebulaUI:Font(20), w / 2, h - 18, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+        if (AvailableGrapple) then
+            DisableClipping(true)
+            surface.DrawTexturedRect(-w + 8, h - 32, w, 32)
+            draw.SimpleText("[G] Grappling Hook", NebulaUI:Font(20), 8, h - 18, Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            DisableClipping(false)
+        end
     end
 
     hook.Add("PlayerBindPress", cards, function(cards, ply, bind, pressed)
