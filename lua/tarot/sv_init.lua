@@ -74,7 +74,7 @@ hook.Add("DatabaseCreateTables", "NebulaTarot", function()
     }, "steamid")
 
     NebulaDriver:MySQLHook("tarot", function(ply, data)
-        if data or not data.cards then
+        if not data or table.IsEmpty(data) then
             NebulaDriver:MySQLQuery("INSERT INTO tarot (steamid, cards) " .. "VALUES (" .. ply:SteamID64() .. ", '{}');")
             ply._cards = {}
 

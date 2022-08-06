@@ -133,6 +133,7 @@ function NebulaTarot:CreateHUD()
     end
 
     hook.Add("PlayerBindPress", cards, function(cards, ply, bind, pressed)
+        if not cards.ShouldDisplay then return end
         if not pressed then return end
         if string.StartWith(bind, "slot") then
             local id = tonumber(string.sub(bind, 5))
