@@ -52,7 +52,11 @@ function meta:addCard(id, ignore)
         self._cards = {}
     end
 
-    self._cards[id] = math.Clamp((self._cards[id] or 0) + 1, 0, definition.Max)
+    self._cards[id] = (self._cards[id] or 0) + 1
+    if (self._cards[id] >= definition.max) then
+        self._cards[id] = definition.max
+        return
+    end
     net.Start("Nebula.Tarot:UpdateCards")
     net.WriteString(id)
     net.WriteUInt(self._cards[id], 8)

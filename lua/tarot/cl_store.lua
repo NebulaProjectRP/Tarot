@@ -1,5 +1,5 @@
 local PANEL = {}
-
+local cardCooldown = 0
 function PANEL:Init()
     NebulaTarot.Store = self
     NebulaTarot.Controller = {}
@@ -64,6 +64,11 @@ function PANEL:SetupScene()
 
             return
         end
+        if (cardCooldown > CurTime()) then
+            return
+        end
+
+        cardCooldown = CurTime() + 2.5
 
         net.Start("Nebula.Tarot:BuyCard")
         net.SendToServer()
