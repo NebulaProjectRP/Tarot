@@ -62,7 +62,7 @@ function meta:addCard(id, ignore)
         NebulaDriver:MySQLUpdate("tarot", {
             cards = util.TableToJSON(self._cards)
         }, "steamid = " .. self:SteamID64(), function(a, req)
-            MsgN(req)
+
         end)
     end
 end
