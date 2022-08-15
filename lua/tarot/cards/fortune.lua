@@ -114,7 +114,7 @@ net.Receive("Nebula.Tarot:Fortune", function()
         doTick(15)
     else
         local dice = net.ReadUInt(3)
-        chat.AddText(Color(150, 50, 255), "[Tarot] ", Color(255, 255, 255), "You rolled a ", Color(150, 50, 255), dice, Color(255, 255, 255), "!\n", Color(225, 200, 75), texts[dice])
+        chat.AddText(Color(150, 50, 255), "[Tarot] ", Color(255, 255, 255), "You rolled a ", Color(150, 50, 255), dice, Color(255, 255, 255), "! ", Color(225, 200, 75), texts[dice])
     end
 end)
 
