@@ -1,12 +1,9 @@
 AddCSLuaFile()
-
 game.AddParticles("particles/nebula.pcf")
 PrecacheParticleSystem("tarot_card")
-
 TAROT = {}
 AddCSLuaFile("cards/base.lua")
 include("cards/base.lua")
-
 NebulaTarot.CardPrice = 5000
 
 NebulaTarot.Cards = {
@@ -14,11 +11,10 @@ NebulaTarot.Cards = {
 }
 
 MsgC(Color(100, 50, 255), "Loading Nebula Tarot cards...\n")
-
 local files, _ = file.Find("tarot/cards/*.lua", "LUA")
 
 for k, v in pairs(files) do
-    if (v == "base.lua") then continue end
+    if v == "base.lua" then continue end
     MsgC(Color(255, 255, 255), "\tLoading " .. string.sub(v, 1, #v - 5))
     AddCSLuaFile("tarot/cards/" .. v)
     include("tarot/cards/" .. v)
@@ -28,7 +24,6 @@ for k, v in pairs(files) do
 end
 
 MsgC(Color(100, 50, 255), "Finished Loading...\n")
-
 local meta = FindMetaTable("Player")
 
 function meta:getCards()
