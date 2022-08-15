@@ -7,13 +7,16 @@ TAROT = {}
 AddCSLuaFile("cards/base.lua")
 include("cards/base.lua")
 
-NebulaTarot.CardPrice = 1000
+NebulaTarot.CardPrice = 5000
+
 NebulaTarot.Cards = {
     base = table.Copy(TAROT)
 }
 
 MsgC(Color(100, 50, 255), "Loading Nebula Tarot cards...\n")
+
 local files, _ = file.Find("tarot/cards/*.lua", "LUA")
+
 for k, v in pairs(files) do
     if (v == "base.lua") then continue end
     MsgC(Color(255, 255, 255), "\tLoading " .. string.sub(v, 1, #v - 5))
@@ -23,7 +26,9 @@ for k, v in pairs(files) do
     TAROT = nil
     MsgC(Color(73, 255, 134), " :D\n")
 end
+
 MsgC(Color(100, 50, 255), "Finished Loading...\n")
+
 local meta = FindMetaTable("Player")
 
 function meta:getCards()
