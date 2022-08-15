@@ -7,13 +7,5 @@ TAROT.Cost = 20000
 TAROT.Skin = 1
 
 function TAROT:OnDeath(ply)
-    local gotWeapons = false
-    for k, v in pairs(ply:GetWeapons()) do
-        if (v.ItemID) then
-            gotWeapons = true
-            ply:addItem(v.ItemID, 1)
-        end
-    end
-
-    return gotWeapons
+    ply.hasFool = true
 end
