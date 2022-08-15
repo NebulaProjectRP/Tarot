@@ -16,8 +16,6 @@ function NebulaTarot:ShowCard(id)
     NebulaTarot.Card = pnl
     surface.PlaySound("nebularp/gotohell.wav")
     surface.PlaySound("nebularp/gotohell.wav")
-    surface.PlaySound("nebularp/gotohell.wav")
-    surface.PlaySound("nebularp/gotohell.wav")
     pnl:SetSize(450, 600)
     pnl:SetPos(ScrW() / 2 - pnl:GetWide() / 2, ScrH() - pnl:GetTall())
     pnl:SetModel("models/nebularp/tarot.mdl")
@@ -107,7 +105,6 @@ if IsValid(NebulaTarot.CardHUD) then
 end
 
 function NebulaTarot:CreateHUD()
-
     if IsValid(NebulaTarot.CardHUD) then
         NebulaTarot.CardHUD:Remove()
     end
@@ -133,15 +130,18 @@ function NebulaTarot:CreateHUD()
     end
 
     hook.Add("PlayerBindPress", cards, function(cards, ply, bind, pressed)
-        if not cards.ShouldDisplay then return end
         if not pressed then return end
+        if not cards.ShouldDisplay then return end
+        
         if string.StartWith(bind, "slot") then
             local id = tonumber(string.sub(bind, 5))
             local card = NebulaTarot.Favorites[id]
+
             if not card then
                 surface.PlaySound("physics/cardboard/cardboard_box_impact_soft2.wav")
                 return
             end
+
             if (LocalPlayer():getCards()[card] or 0) > 0 then
                 NebulaTarot:ShowCard(card)
                 net.Start("Nebula.Tarot:RequestUse")

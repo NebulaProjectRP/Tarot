@@ -4,7 +4,7 @@ end
 
 TAROT = {}
 TAROT.Name = "Wheel Of Fortune"
-TAROT.Help = "Applies a random buff which deal extra damage or gain money"
+TAROT.Help = "Applies a random buff which deals extra damage or gives money!"
 TAROT.Max = 3
 TAROT.Rarity = 3
 TAROT.Cost = 6000
