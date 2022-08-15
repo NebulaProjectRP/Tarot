@@ -115,8 +115,8 @@ local nextHeap = 0
 
 net.Receive("Nebula.Tarot:BuyCard", function(l, ply)
     if not ply:canAfford(NebulaTarot.Price) then
-        MsgN("Poor kid")
-        --return
+        DarkRP.notify(ply, 1, 5, "You cannot afford a card")
+        return
     end
 
     if nextHeap < CurTime() then
@@ -132,6 +132,7 @@ net.Receive("Nebula.Tarot:BuyCard", function(l, ply)
 
     local result = heap[math.random(1, 100)]
     ply:addCard(result)
+    ply:addMoney(-NebulaTarot.Price)
     net.Start("Nebula.Tarot:BuyCard")
     net.WriteString(result)
     net.Send(ply)
