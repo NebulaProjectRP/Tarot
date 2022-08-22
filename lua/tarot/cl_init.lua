@@ -14,7 +14,7 @@ function NebulaTarot:ShowCard(id)
 
     local pnl = vgui.Create("DModelPanel")
     NebulaTarot.Card = pnl
-    LocalPlayer():EmitSound("nebularp/gotohell.wav")
+    //LocalPlayer():EmitSound("nebularp/gotohell.wav")
     pnl:SetSize(450, 600)
     pnl:SetPos(ScrW() / 2 - pnl:GetWide() / 2, ScrH() - pnl:GetTall())
     pnl:SetModel("models/nebularp/tarot.mdl")
