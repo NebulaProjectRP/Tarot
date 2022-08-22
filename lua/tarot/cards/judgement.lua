@@ -9,7 +9,7 @@ TAROT.Skin = 4
 function TAROT:OnUse(ply)
     ply:addBuff("judgement", 5)
     ply.infiniteBullets = true
-    ply:EmitSound("nebularp/spell_overheal.wav", 140)
+    ply:EmitSound("nebularp/spell_overheal.wav")
     ply:Wait(10, function()
         self:Remove(ply)
         ply:EmitSound("nebularp/duck_pickup_neg_01.wav")

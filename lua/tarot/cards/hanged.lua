@@ -9,7 +9,7 @@ TAROT.Skin = 3
 function TAROT:OnUse(ply)
     ply:addBuff("noheadshots", 10)
     ply.noHeadShots = true
-    ply:EmitSound("nebularp/duck_pickup_pos_01.wav", 140)
+    ply:EmitSound("nebularp/duck_pickup_pos_01.wav")
     ply:Wait(10, function()
         self:Remove(ply)
     end)

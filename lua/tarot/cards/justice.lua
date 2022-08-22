@@ -17,5 +17,5 @@ function TAROT:OnUse(ply)
         v:SetClip1(v:GetMaxClip1())
     end
 
-    ply:EmitSound("nebularp/spell_overheal.wav", 140)
+    ply:EmitSound("nebularp/spell_overheal.wav")
 end

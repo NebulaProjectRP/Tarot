@@ -8,7 +8,7 @@ TAROT.Skin = 6
 
 function TAROT:OnUse(ply)
     ply:addBuff("strength", 10)
-    ply:EmitSound("nebularp/spell_overheal.wav", 140)
+    ply:EmitSound("nebularp/spell_overheal.wav")
     ply:Wait(10, function()
         self:Remove(ply)
     end)
