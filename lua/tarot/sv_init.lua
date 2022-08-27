@@ -53,7 +53,8 @@ function meta:addCard(id, ignore)
     end
 
     self._cards[id] = (self._cards[id] or 0) + 1
-    if (self._cards[id] >= definition.max) then
+
+    if ((self._cards[id] or 0) >= (definition.max or 5)) then
         self._cards[id] = definition.max
         return
     end
