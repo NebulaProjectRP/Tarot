@@ -7,10 +7,10 @@ TAROT.Cost = 3000
 TAROT.Skin = 5
 
 function TAROT:OnUse(ply)
-    local health = (1 - math.Clamp(ply:Health() / ply:GetMaxHealth(), 0, 1)) / 4
+    local health = (1 - math.Clamp(ply:Health() / ply:GetMaxHealth(), 0, 1)) / 2
     ply:SetHealth(ply:Health() + health * ply:GetMaxHealth())
 
-    local armor = (1 - math.Clamp(ply:Armor() / ply:GetMaxArmor(), 0, 1)) / 4
+    local armor = (1 - math.Clamp(ply:Armor() / ply:GetMaxArmor(), 0, 1)) / 2
     ply:SetArmor(ply:Armor() + armor * 100)
 
     for k, v in pairs(ply:GetWeapons()) do
